@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+// Service definition
+service CustomerServer {
+    rpc GetAll (Empty) returns (CustomerList);
+    rpc Get (CustomerRequestID) returns (Customer);
+    rpc Insert (Customer) returns (Customer);
+    rpc Update (Customer) returns (Customer);
+    rpc Remove (CustomerRequestID) returns (Empty);
+}
+
+// Message definitions
+message Empty {}
+
+message CustomerRequestID {
+    string id = 1;
+}
+
+message CustomerList {
+    repeated Customer customers = 1;
+}
+
+message Customer {
+    string id = 1;
+    string name = 2;
+    int32 age = 3;
+    string address = 4;
+}
