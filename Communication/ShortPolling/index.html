@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Short Polling</title>
+</head>
+<body>
+
+    <div id="user-detail" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+    </div>
+    <button id="update" style="margin-left: 45%; margin-top: 50px;">update user</button>
+
+</body>
+<script>
+
+    async function initialDataLoad() {
+        try {
+            const response = await fetch('/get-data');
+            const data = await response.json();
+            console.log(data)
+
+            const container = document.getElementById('user-detail');
+            container.innerHTML = `
+                <img style="width: 150px; border-radius: 150px;" src="${data.profileImg}" alt="${data.name}" />
+                <h1 style="margin: 5px;">${data.name}</h1>
+                <p style="margin: 5px;">${data.email}</p>
+            `;
+        }catch (err) {
+            console.log('Soemthing went wrong', err);
+        }
+    }
+    initialDataLoad();
+
+    async function shortPolling() {
+        const intervalId = setInterval(async () => {
+            await initialDataLoad();
+        }, 3000);
+
+        setTimeout(() => {
+            // Note - Remember to clear the interval on any user event, action or on completion of the task, 
+            // as it may lead to load on server because of consequetive requests and lead to global exception
+            clearInterval(intervalId);
+            console.log('Polling stopped');
+        }, 15000); // Stop polling after 15 seconds
+    }
+    shortPolling();
+
+    const btn = document.getElementById('update');
+    btn.addEventListener("click", async() => {
+        await fetch('update-data');
+    });
+
+</script>
+</html>
