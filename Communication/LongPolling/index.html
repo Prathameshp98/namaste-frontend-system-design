@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Long Polling</title>
+</head>
+<body>
+
+    <div id="user-detail" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+    </div>
+    <button id="update" style="margin-left: 45%; margin-top: 50px;">update user</button>
+    <p id="error" style="text-align: center; margin: 50px;"></p>
+
+</body>
+<script>
+
+    let lastUpdated = 0;    
+
+    async function initialDataLoad() {
+        try {
+            const response = await Promise.race([
+                fetch(`/get-data?lastUpdated=${lastUpdated}`),  // Long-polling request
+                new Promise((_, reject) => setTimeout(() => reject({ error: 'Timeout', message: 'Request timed out. No updates available. Please refresh the page.'}), 10000))  // Timeout after 10 seconds
+            ]);
+            
+            const data = await response.json();
+
+            if(data){
+                const container = document.getElementById('user-detail');
+                container.innerHTML = `
+                    <img style="width: 150px; border-radius: 150px;" src="${data.profileImg}" alt="${data.name}" />
+                    <h1 style="margin: 5px;">${data.name}</h1>
+                    <p style="margin: 5px;">${data.email}</p>
+                `;
+            }
+            
+            lastUpdated = data.lastUpdated;
+            initialDataLoad();
+        }catch (err) {
+            if(err.error == 'Timeout'){
+                console.log(err.message);
+                document.getElementById('error').innerHTML = err.message;
+            } else {
+                console.log('Something went wrong', err);
+            }
+        }
+    }
+    initialDataLoad();
+
+    const btn = document.getElementById('update');
+    btn.addEventListener("click", async() => {
+        await fetch('update-data');
+    });
+
+</script>
+</html>
