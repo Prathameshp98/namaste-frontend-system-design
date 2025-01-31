@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Server Side Events</title>
+    <style>
+
+    </style>
+</head>
+<body>
+
+    <div id="sse-data"></div>
+    <script>
+        
+        const eventSource = new EventSource('/sse');
+        
+        eventSource.onmessage = (event) => {
+            console.log(event.data);
+            
+            const sseDataContainer = document.getElementById('sse-data');
+            sseDataContainer.innerHTML += `<p>${event.data}</p>`;
+        };
+
+        eventSource.onerror = (error) => {
+            console.error("EventSource failed:", error);
+        };
+    </script>
+
+</body>
+</html>
