@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Clickjacking Example</title>
+  </head>
+  <body>
+    <h1>Clickjacking Example</h1>
+    <p>Click the button below to see a simple clickjacking demonstration.</p>
+    <button id="overlay-button">Click Me!</button>
+
+    <!-- Try using google search engine as the iframe -->
+    <!-- Error: chromewebdata/:1 Refused to display 'https://www.google.co.in/' in a frame because it set 'X-Frame-Options' to 'sameorigin'. -->
+    <iframe src="https://www.google.co.in/"></iframe>
+
+    <script>
+        // Simulate a clickjacking attack by overlaying the button on top of the iframe 
+         document.getElementById("overlay-button").addEventListener("click", () => {
+          alert("Button clicked!");
+        });
+    </script>
+  </body>
+</html>
