@@ -1,0 +1,2 @@
+This is a static file for HTTP caching demonstration.
+Timestamp: 2025-06-18T15:28:12.756Z
