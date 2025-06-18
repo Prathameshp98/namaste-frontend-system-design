@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager with IndexedDB</title>
+    <!-- Include Dexie.js -->
+    <script src="https://unpkg.com/dexie/dist/dexie.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .task-form {
+            margin-bottom: 20px;
+        }
+        .task-input {
+            padding: 8px;
+            width: 60%;
+            margin-right: 10px;
+        }
+        .task-button {
+            padding: 8px 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .task-button:hover {
+            background-color: #45a049;
+        }
+        .task-list {
+            list-style: none;
+            padding: 0;
+        }
+        .task-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .task-item:last-child {
+            border-bottom: none;
+        }
+        .task-actions {
+            display: flex;
+            gap: 10px;
+        }
+        .delete-button {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .complete-button {
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .completed {
+            text-decoration: line-through;
+            color: #888;
+        }
+        .status {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .success {
+            background-color: #dff0d8;
+            color: #3c763d;
+        }
+        .error {
+            background-color: #f2dede;
+            color: #a94442;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Task Manager</h1>
+        <div class="task-form">
+            <input type="text" id="taskInput" class="task-input" placeholder="Enter a new task">
+            <button onclick="addTask()" class="task-button">Add Task</button>
+        </div>
+        <div id="status" class="status" style="display: none;"></div>
+        <ul id="taskList" class="task-list"></ul>
+    </div>
+
+    <script>
+        // Initialize Dexie database
+        const db = new Dexie('TaskManagerDB');
+
+        // Define database schema
+        db.version(1).stores({
+            tasks: '++id, title, completed, createdAt'
+        });
+
+        // Add a new task
+        async function addTask() {
+            const taskInput = document.getElementById('taskInput');
+            const title = taskInput.value.trim();
+
+            if (!title) {
+                showStatus('Please enter a task', 'error');
+                return;
+            }
+
+            try {
+                await db.tasks.add({
+                    title,
+                    completed: false,
+                    createdAt: new Date()
+                });
+
+                taskInput.value = '';
+                showStatus('Task added successfully!', 'success');
+                loadTasks();
+            } catch (error) {
+                showStatus('Error adding task: ' + error.message, 'error');
+            }
+        }
+
+        // Load all tasks
+        async function loadTasks() {
+            try {
+                const tasks = await db.tasks.orderBy('createdAt').toArray();
+                const taskList = document.getElementById('taskList');
+                taskList.innerHTML = '';
+
+                tasks.forEach(task => {
+                    const li = document.createElement('li');
+                    li.className = 'task-item';
+                    li.innerHTML = `
+                        <span class="${task.completed ? 'completed' : ''}">${task.title}</span>
+                        <div class="task-actions">
+                            <button onclick="toggleTask(${task.id}, ${!task.completed})" 
+                                    class="complete-button">
+                                ${task.completed ? 'Undo' : 'Complete'}
+                            </button>
+                            <button onclick="deleteTask(${task.id})" class="delete-button">
+                                Delete
+                            </button>
+                        </div>
+                    `;
+                    taskList.appendChild(li);
+                });
+            } catch (error) {
+                showStatus('Error loading tasks: ' + error.message, 'error');
+            }
+        }
+
+        // Toggle task completion status
+        async function toggleTask(id, completed) {
+            try {
+                await db.tasks.update(id, { completed });
+                loadTasks();
+                showStatus('Task updated successfully!', 'success');
+            } catch (error) {
+                showStatus('Error updating task: ' + error.message, 'error');
+            }
+        }
+
+        // Delete a task
+        async function deleteTask(id) {
+            try {
+                await db.tasks.delete(id);
+                loadTasks();
+                showStatus('Task deleted successfully!', 'success');
+            } catch (error) {
+                showStatus('Error deleting task: ' + error.message, 'error');
+            }
+        }
+
+        // Show status message
+        function showStatus(message, type) {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.className = `status ${type}`;
+            status.style.display = 'block';
+            setTimeout(() => {
+                status.style.display = 'none';
+            }, 3000);
+        }
+
+        // Load tasks when page loads
+        document.addEventListener('DOMContentLoaded', loadTasks);
+
+        // Add task when Enter key is pressed
+        document.getElementById('taskInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                addTask();
+            }
+        });
+    </script>
+</body>
+</html> 
