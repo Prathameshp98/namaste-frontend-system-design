@@ -2,7 +2,8 @@ IndexedDB: A Comprehensive Guide
 
 What is IndexedDB?
 ------------------
-IndexedDB is a low-level API for client-side storage of significant amounts of structured data, including files/blobs. It is a transactional database system, similar to SQL-based RDBMS, but uses JavaScript objects instead of fixed columns.
+IndexedDB is a low-level API for client-side storage of significant amounts of structured data, including files/blobs. 
+It is a transactional database system, similar to SQL-based RDBMS, but uses JavaScript objects instead of fixed columns.
 
 Key Features:
 1. Large Storage Capacity: Can store much more data than localStorage or cookies
