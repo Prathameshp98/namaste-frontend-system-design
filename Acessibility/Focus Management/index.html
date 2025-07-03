@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accessibility Focus Management Demo</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Skip Links -->
+    <nav class="skip-links" aria-label="Skip navigation">
+        <a href="#main-content" class="skip-link">Skip to main content</a>
+        <a href="#navigation" class="skip-link">Skip to navigation</a>
+        <a href="#keyboard-shortcuts" class="skip-link">Skip to keyboard shortcuts</a>
+    </nav>
+
+    <!-- Header with Navigation -->
+    <header class="header">
+        <nav id="navigation" class="main-nav" role="navigation" aria-label="Main navigation">
+            <div class="nav-container">
+                <h1 class="logo">Accessibility Demo</h1>
+                <ul class="nav-menu">
+                    <li><a href="#main-content" class="nav-link">Home</a></li>
+                    <li><a href="#tab-navigation" class="nav-link">Tab Navigation</a></li>
+                    <li><a href="#keyboard-shortcuts" class="nav-link">Keyboard Shortcuts</a></li>
+                    <li><a href="#skip-links" class="nav-link">Skip Links</a></li>
+                    <li><a href="#active-element" class="nav-link">Active Element</a></li>
+                    <li><a href="#tab-trapping" class="nav-link">Tab Trapping</a></li>
+                    <li><a href="#page-navigation" class="nav-link">Page Navigation</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main id="main-content" class="main-content" role="main">
+        <section class="hero">
+            <h2>Accessibility Focus Management Demo</h2>
+            <p>This demo showcases various accessibility features for focus management. Use your keyboard to navigate and explore the different sections.</p>
+        </section>
+
+        <!-- Tab Navigation Demo -->
+        <section id="tab-navigation" class="demo-section">
+            <h3>1. Tab Navigation</h3>
+            <p>Use Tab and Shift+Tab to navigate through these interactive elements:</p>
+            
+            <div class="tab-demo">
+                <button class="demo-button" tabindex="0">Button 1</button>
+                <input type="text" class="demo-input" placeholder="Text input" tabindex="0">
+                <select class="demo-select" tabindex="0">
+                    <option value="">Select an option</option>
+                    <option value="option1">Option 1</option>
+                    <option value="option2">Option 2</option>
+                    <option value="option3">Option 3</option>
+                </select>
+                <a href="#" class="demo-link" tabindex="0">Link element</a>
+                <button class="demo-button" tabindex="0">Button 2</button>
+            </div>
+        </section>
+
+        <!-- Keyboard Shortcuts Demo -->
+        <section id="keyboard-shortcuts" class="demo-section">
+            <h3>2. Keyboard Shortcuts</h3>
+            <p>Try these keyboard shortcuts:</p>
+            <ul class="shortcuts-list">
+                <li><kbd>Ctrl</kbd> + <kbd>K</kbd> - Open search</li>
+                <li><kbd>Ctrl</kbd> + <kbd>M</kbd> - Toggle menu</li>
+                <li><kbd>Ctrl</kbd> + <kbd>H</kbd> - Show help</li>
+                <li><kbd>Escape</kbd> - Close modal</li>
+            </ul>
+            
+            <div class="shortcuts-demo">
+                <button id="search-btn" class="shortcut-btn" data-shortcut="ctrl+k">Open Search (Ctrl+K)</button>
+                <button id="menu-btn" class="shortcut-btn" data-shortcut="ctrl+m">Toggle Menu (Ctrl+M)</button>
+                <button id="help-btn" class="shortcut-btn" data-shortcut="ctrl+h">Show Help (Ctrl+H)</button>
+                <button id="modal-btn" class="shortcut-btn" data-shortcut="escape">Close Modal (Escape)</button>
+            </div>
+        </section>
+
+        <!-- Skip Links Demo -->
+        <section id="skip-links" class="demo-section">
+            <h3>3. Skip Links</h3>
+            <p>Skip links allow keyboard users to jump directly to important sections. Press Tab at the beginning of the page to see them.</p>
+            
+            <div class="skip-demo">
+                <p>This section demonstrates skip links functionality. When you press Tab at the very beginning of the page, you'll see skip links appear that allow you to jump directly to important sections.</p>
+                <button class="demo-button">Interactive element</button>
+            </div>
+        </section>
+
+        <!-- Active Element Demo -->
+        <section id="active-element" class="demo-section">
+            <h3>4. Active Element Tracking</h3>
+            <p>The currently focused element is highlighted below:</p>
+            
+            <div class="active-element-display">
+                <div id="active-element-info" class="active-info">
+                    <strong>Currently focused:</strong> <span id="active-element-text">None</span>
+                </div>
+            </div>
+            
+            <div class="active-demo">
+                <button class="focusable-element">Focusable Button 1</button>
+                <input type="text" class="focusable-element" placeholder="Focusable Input">
+                <a href="#" class="focusable-element">Focusable Link</a>
+                <button class="focusable-element">Focusable Button 2</button>
+            </div>
+        </section>
+
+        <!-- Tab Trapping Demo -->
+        <section id="tab-trapping" class="demo-section">
+            <h3>5. Tab Trapping</h3>
+            <p>This modal demonstrates tab trapping - focus stays within the modal when using Tab/Shift+Tab:</p>
+            
+            <button id="open-modal" class="modal-trigger">Open Modal (Tab Trapping Demo)</button>
+            
+            <div id="trapping-modal" class="modal" role="dialog" aria-labelledby="modal-title" aria-modal="true" hidden>
+                <div class="modal-content">
+                    <h4 id="modal-title">Tab Trapping Modal</h4>
+                    <p>Use Tab and Shift+Tab to navigate. Focus is trapped within this modal.</p>
+                    
+                    <div class="modal-elements">
+                        <button class="modal-btn">Modal Button 1</button>
+                        <input type="text" class="modal-input" placeholder="Modal Input">
+                        <button class="modal-btn">Modal Button 2</button>
+                        <a href="#" class="modal-link">Modal Link</a>
+                    </div>
+                    
+                    <button id="close-modal" class="modal-close">Close Modal</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Page Navigation Demo -->
+        <section id="page-navigation" class="demo-section">
+            <h3>6. Page Navigation</h3>
+            <p>Demonstrates programmatic focus management for page navigation:</p>
+            
+            <div class="page-nav-demo">
+                <button id="focus-top" class="nav-btn">Focus Top of Page</button>
+                <button id="focus-main" class="nav-btn">Focus Main Content</button>
+                <button id="focus-bottom" class="nav-btn">Focus Bottom of Page</button>
+                <button id="focus-first-interactive" class="nav-btn">Focus First Interactive Element</button>
+            </div>
+            
+            <div class="page-sections">
+                <div id="page-top" class="page-section" tabindex="-1">
+                    <h4>Top of Page</h4>
+                    <p>This section can be focused programmatically.</p>
+                </div>
+                
+                <div id="page-bottom" class="page-section" tabindex="-1">
+                    <h4>Bottom of Page</h4>
+                    <p>This section can also be focused programmatically.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2024 Accessibility Focus Management Demo</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
